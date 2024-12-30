@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Temperatura</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Librería para las gráficas -->
+    <link rel="stylesheet" href="styles.css"> <!-- Estilos para la página principal -->
+</head>
+<body>
+    <!-- Navegación -->
+    <nav>
+        <a href="#" onclick="showSection('inicio')">Inicio</a>
+        <a href="#" onclick="showSection('proceso')">Control</a>
+        <a href="#" onclick="showSection('base-de-datos')">Registro del Día</a>
+    </nav>
+
+    <!-- Secciones -->
+    <section id="inicio" class="section active">
+        <h1>Control de Temperatura</h1>
+        <p>Este sistema está diseñado para controlar de manera eficiente la temperatura en una incubadora utilizando reubicación de polos. Establece una temperatura deseada y monitorea los registros diarios para garantizar las condiciones óptimas.</p>
+    </section>
+
+    <section id="proceso" class="section">
+        <h2>Establecer Temperatura Deseada</h2>
+        <div class="control-container">
+            <p class="last-reference">Última referencia: <span id="ultima-referencia">--</span> °C</p>
+            <form id="control-form">
+                <label for="temperatura">Ingrese la temperatura deseada (°C):</label>
+                <input type="number" id="temperatura" name="temperatura" step="0.1" min="33" max="42" required>
+
+                <!-- Botón de "Iniciar Proceso" -->
+                <div class="form-group">
+                    <button type="button" onclick="iniciarProceso()">Iniciar Proceso</button>
+                </div>
+
+                <!-- Botones de "Abrir" y "Cerrar" en la misma línea, centrados -->
+                <div class="botones-control">
+                    <button onclick="enviarAccion('cerrar')">Cerrar incubadora</button>
+                    <button onclick="enviarAccion('abrir')">Abrir incubadora</button>
+                </div>
+            </form>
+
+            <!-- Mensaje temporal que indica el estado -->
+            <div id="mensaje-estado" style="display: none; text-align: center; margin-top: 20px;">
+                <p id="mensaje-accion">Cargando...</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="base-de-datos" class="section">
+        <h2>Registro del Día</h2>
+        <form action="ver_registros.php" method="GET" target="_blank">
+            <label for="dia">Seleccionar Día:</label>
+            <input type="number" id="dia" name="dia" min="1" max="31" required>
+            <button type="submit">Ver Registro</button>
+        </form>
+    </section>
+
+    <!-- Pie de página -->
+    <footer>
+        <p>INCUBADORA SISTEMAS EXPERTOS Y CONTROL DIGITAL.</p>
+    </footer>
+    <script>
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+        }
+    
+        // Función para obtener la última referencia (temperatura) de la base de datos
+        function obtenerUltimaReferencia() {
+            fetch('obtener_ultima_referencia.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.temperatura !== undefined) {
+                        document.getElementById('ultima-referencia').textContent = data.temperatura + ' °C';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al obtener la última referencia:', error);
+                });
+        }
+    
+        // Llamar la función para obtener la última referencia al cargar la página
+        document.addEventListener('DOMContentLoaded', obtenerUltimaReferencia);
+    
+        
+            // Función para abrir o cerrar la incubadora y registrar la temperatura
+        function enviarAccion(accion) {
+            // Mostrar mensaje de estado
+            const mensajeEstado = document.getElementById('mensaje-estado');
+            const mensajeAccion = document.getElementById('mensaje-accion');
+            mensajeEstado.style.display = 'block';
+            mensajeAccion.textContent = accion === 'abrir' ? 'Abriendo incubadora...' : 'Cerrando incubadora...';
+
+            // Crear la URL con los parámetros de acción y temperatura
+            const temperatura = document.getElementById('temperatura').value;  // Tomamos la temperatura ingresada
+            const url = `control_incubadora.php?accion=${accion}&temperatura=${temperatura}`;
+
+            // Enviar solicitud GET a través de fetch
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data.mensaje);
+                    mensajeAccion.textContent = data.mensaje; // Actualiza el mensaje de estado
+
+                    // Enviar solicitud POST con la acción a otro archivo PHP
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", "control_servos.php", true);
+                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+                    // Enviar el parámetro con la acción especificada
+                    xhr.send("accion=" + accion);
+
+                    // Ocultar el mensaje después de 3 segundos
+                    setTimeout(() => {
+                        mensajeEstado.style.display = 'none';
+                    }, 3000);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    mensajeAccion.textContent = 'Error al realizar la acción';
+                });
+        }
+
+    
+        // Función para iniciar el proceso y actualizar la base de datos con la nueva temperatura
+        function iniciarProceso() {
+            const temperatura = document.getElementById('temperatura').value;
+
+            // Verificar si se ingresó una temperatura válida
+            if (!temperatura || parseFloat(temperatura) < 33 || parseFloat(temperatura) > 42) {
+                alert("Por favor, ingresa una temperatura válida entre 33°C y 42°C.");
+                return;
+            }
+
+            // Enviar la nueva temperatura deseada al servidor
+            fetch('control_incubadora.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `temperatura=${encodeURIComponent(temperatura)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.mensaje);
+                alert(data.mensaje); // Mostrar el mensaje de éxito o error
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>    
+
+</body>
+</html>

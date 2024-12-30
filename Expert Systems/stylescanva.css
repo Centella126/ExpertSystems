@@ -1,0 +1,39 @@
+/* Estilos generales */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fffbea;
+    color: #333;
+}
+
+/* Estilo para las tablas */
+table {
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+    background-color: #fffdf0;
+}
+
+th {
+    background-color: #ffeaa7;
+    color: #333;
+}
+
+h2 {
+    text-align: center;
+    color: #555;
+}
+
+/* Estilos para las gráficas */
+canvas {
+    width: 80%;
+    height: 400px;
+    margin: 20px auto;
+}

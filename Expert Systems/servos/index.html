@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Servos</title>
+    <script>
+        function moverServos() {
+            // Enviar una solicitud AJAX al PHP
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "control.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            
+            // Enviar el parámetro 'accion=mover'
+            xhr.send("accion=mover");
+
+            // Manejar la respuesta del servidor
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    alert(xhr.responseText); // Muestra la respuesta del servidor
+                } else {
+                    alert("Hubo un error al comunicarse con el servidor.");
+                }
+            };
+        }
+    </script>
+</head>
+<body>
+    <h1>Control de Servos</h1>
+    <button onclick="moverServos()">Mover Servos</button>
+</body>
+</html>

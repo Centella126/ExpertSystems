@@ -1,0 +1,198 @@
+/* Estilos generales */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fffbea; /* Fondo amarillo pastel */
+    color: #333;
+}
+
+/* Estilo del panel de navegación */
+nav {
+    background-color: #fff5cc;
+    color: #555;
+    display: flex;
+    justify-content: center;
+    padding: 15px 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+nav a {
+    color: #555;
+    text-decoration: none;
+    font-size: 1.2rem;
+    margin: 0 20px;
+    padding: 10px 15px;
+    background-color: #ffeaa7;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+nav a:hover {
+    background-color: #ffda77;
+    color: #333;
+    transform: scale(1.1);
+}
+
+/* Contenedor principal */
+.section {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 60px); /* Ocupa toda la altura menos el menú */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #fffdf0;
+    border-radius: 15px;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    transform: scale(0.9) translateX(-50px);
+    transition: all 0.8s ease-in-out;
+    visibility: hidden;
+}
+
+.section.active {
+    opacity: 1;
+    transform: scale(1) translateX(0);
+    visibility: visible;
+}
+
+h1, h2 {
+    font-family: 'Libre Baskerville', serif;
+    text-align: center;
+    color: #555;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+p {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    text-align: center;
+    color: #666;
+    max-width: 600px;
+}
+
+/* Formulario */
+.control-container {
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+}
+
+label {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    display: block;
+    color: #555;
+}
+
+input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 2px solid #ffeaa7;
+    border-radius: 10px;
+    font-size: 1rem;
+    background-color: #fffdf0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="number"]:focus {
+    border-color: #ffda77;
+    outline: none;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Botón de "Iniciar Proceso" */
+.form-group {
+    margin: 20px 0; /* Espacio adicional entre los botones */
+}
+
+/* Botón estándar */
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #ffeaa7;
+    color: #333;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+button:first-of-type {
+    margin-bottom: 10px; /* Espacio entre los botones */
+}
+
+button:hover {
+    background-color: #ffda77;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Contenedor de enlaces */
+.link-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.last-reference {
+    margin: 20px 0;
+    font-size: 1.3rem;
+    color: #555;
+    font-weight: bold;
+}
+
+/* Estilos para el pie de página */
+footer {
+    margin-top: 40px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #999;
+}
+
+/* Estilos de los botones de control (Abrir y Cerrar) */
+.botones-control {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px; /* Espacio adicional entre los botones de control */
+}
+
+.botones-control button {
+    width: 48%; /* Ajustamos el ancho de los botones */
+    padding: 12px;
+    background-color: #ffeaa7;
+    color: #333;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.botones-control button:hover {
+    background-color: #ffda77;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
